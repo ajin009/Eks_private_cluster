@@ -87,60 +87,60 @@ module "eks_node_group" {
  }
 }
 
-# module "bastion_aws_key_pair" {
-#  source              = "./modules/terraform-aws-key-pair"
-#  namespace           = var.namespace
-#  stage               = var.stage
-#  name                = var.bastion_aws_key_pair_name
-#  ssh_public_key_path = var.ssh_public_key_path
-#  generate_ssh_key    = var.generate_ssh_key
-# }
+module "bastion_aws_key_pair" {
+ source              = "./modules/terraform-aws-key-pair"
+ namespace           = var.namespace
+ stage               = var.stage
+ name                = var.bastion_aws_key_pair_name
+ ssh_public_key_path = var.ssh_public_key_path
+ generate_ssh_key    = var.generate_ssh_key
+}
 
-# module "instance_profile_label_bastion" {
-#  source    = "./modules/terraform-null-label"
-#  namespace = var.namespace
-#  stage     = var.stage
-#  name      = "prod-bastion-host"
-# }
+module "instance_profile_label_bastion" {
+ source    = "./modules/terraform-null-label"
+ namespace = var.namespace
+ stage     = var.stage
+ name      = "prod-bastion-host"
+}
 
-# resource "aws_iam_role" "bastion" {
-#  name               = module.instance_profile_label_bastion.id
-#  assume_role_policy = data.aws_iam_policy_document.bastion_role.json
-#  tags               = module.instance_profile_label_bastion.tags
-# }
+resource "aws_iam_role" "bastion" {
+ name               = module.instance_profile_label_bastion.id
+ assume_role_policy = data.aws_iam_policy_document.bastion_role.json
+ tags               = module.instance_profile_label_bastion.tags
+}
 
-# resource "aws_iam_instance_profile" "bastion" {
-#  name = module.instance_profile_label_bastion.id
-#  role = aws_iam_role.bastion.name
-# }
+resource "aws_iam_instance_profile" "bastion" {
+ name = module.instance_profile_label_bastion.id
+ role = aws_iam_role.bastion.name
+}
 
-# module "bastion" {
-#  source                        = "./modules/terraform-aws-ec2-instance"
-#  ssh_key_pair                  = module.bastion_aws_key_pair.key_name
-#  name                          = module.instance_profile_label_bastion.name
-#  vpc_id                        = module.vpc.vpc_id
-#  ami                           = var.bastion_ami
-#  ami_owner                     = var.ami_owner
-#  subnet                        = module.dynamic_subnets.public_subnet_ids[0]
-#  create_default_security_group = var.create_default_security_group
-#  assign_eip_address            = var.assign_eip_address
-#  associate_public_ip_address   = var.associate_public_ip_address
-#  instance_type                 = var.bastion_instance_type
-#  user_data                     = var.user_data
-# #  user_data_base64              = var.user_data_base64
-#  root_volume_size              = var.bastion_root_volume_size
-#  allowed_ports                 = var.bastion_allowed_ports
-#  root_volume_type              = var.bastion_root_volume_type
-#  instance_profile              = aws_iam_instance_profile.bastion.name
-#  delete_on_termination         = var.bastion_delete_on_termination
-#  monitoring                    = var.bastion_monitoring
-#  ebs_optimized                 = var.bastion_ebs_optimized
-#  tags = {
-#    Environment   = "prod"
-#    Resource_type = "ec2"
-#    Terraform     = "true"
-#  }
-# }
+module "bastion" {
+ source                        = "./modules/terraform-aws-ec2-instance"
+ ssh_key_pair                  = module.bastion_aws_key_pair.key_name
+ name                          = module.instance_profile_label_bastion.name
+ vpc_id                        = module.vpc.vpc_id
+ ami_id                        = var.ami_id
+ ami_owner                     = var.ami_owner
+ subnet                        = module.dynamic_subnets.public_subnet_ids[0]
+ create_default_security_group = var.create_default_security_group
+ assign_eip_address            = var.assign_eip_address
+ associate_public_ip_address   = var.associate_public_ip_address
+ instance_type                 = var.bastion_instance_type
+ user_data                     = var.user_data
+#  user_data_base64              = var.user_data_base64
+ root_volume_size              = var.bastion_root_volume_size
+ allowed_ports                 = var.bastion_allowed_ports
+ root_volume_type              = var.bastion_root_volume_type
+ instance_profile              = aws_iam_instance_profile.bastion.name
+ delete_on_termination         = var.bastion_delete_on_termination
+ monitoring                    = var.bastion_monitoring
+ ebs_optimized                 = var.bastion_ebs_optimized
+ tags = {
+   Environment   = "prod"
+   Resource_type = "ec2"
+   Terraform     = "true"
+ }
+}
 
 
 # resource "null_resource" "install_nginx_ingress" {
@@ -153,9 +153,9 @@ module "eks_node_group" {
  
 #   connection {
 #     type        = "ssh"
-#     host        = var.bastion_ip
+#     host        =  module.bastion.public_ip
 #     user        = "ubuntu"
-#     private_key = file("/home/ajin/project1/environment/terraform_infrastructre/test.pem")
+#     private_key = file("/home/ajin/project1/Eks_private_cluster/environment/terraform_infrastructre/secrets/woooba-prod-bastion-key.pem")
 #   }
  
 #   # provisioner "file" {
@@ -184,3 +184,14 @@ module "eks_node_group" {
 # }
  
 # }
+
+
+module "nginx_ingress" {
+  source                 = "./modules/nginx_ingress"
+  eks_cluster_name       = var.eks_cluster_name
+  aws_region             = "ap-south-1"
+  bastion_host           = module.bastion.public_ip
+  bastion_user           = "ubuntu"
+  bastion_private_key_path = "/home/ajin/project1/Eks_private_cluster/environment/terraform_infrastructre/secrets/woooba-prod-bastion-key.pem"
+}
+

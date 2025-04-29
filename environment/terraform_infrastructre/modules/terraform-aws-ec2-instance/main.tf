@@ -8,8 +8,8 @@ locals {
   root_iops              = var.root_volume_type == "io1" ? var.root_iops : "0"
   ebs_iops               = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
   availability_zone      = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
-  ami                    = var.ami != "" ? var.ami : join("", data.aws_ami.default.*.image_id)
-  ami_owner              = var.ami != "" ? var.ami_owner : join("", data.aws_ami.default.*.owner_id)
+  ami                    = var.ami_id != "" ? var.ami_id : join("", data.aws_ami.default.*.image_id)
+  ami_owner              = var.ami_id != "" ? var.ami_owner : join("", data.aws_ami.default.*.owner_id)
   root_volume_type       = var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type
   public_dns             = var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ? data.null_data_source.eip.outputs["public_dns"] : join("", aws_instance.default.*.public_dns)
 }
@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "default" {
 
 
 data "aws_ami" "default" {
-  count       = var.ami == "" ? 1 : 0
+  count       = var.ami_id == "" ? 1 : 0
   most_recent = "true"
 
   filter {
@@ -91,13 +91,18 @@ data "aws_ami" "default" {
 # }
 
 
+# data "aws_ami" "info" {
+#   filter {
+#     name   = "image-id"
+#     values = ["ami-0393c667f03357980"]
+#   }
+# }
+
 data "aws_ami" "info" {
   filter {
     name   = "image-id"
-    values = [var.ami]
+    values = [var.ami_id]
   }
-
-  owners = ["752249616998"]  # Replace with the desired owner account ID
 }
 
 
@@ -131,7 +136,7 @@ resource "aws_iam_role" "default" {
 
 resource "aws_instance" "default" {
   count                       = local.instance_count
-  ami                         = var.ami
+  ami                         = var.ami_id
   availability_zone           = local.availability_zone
   instance_type               = var.instance_type
   ebs_optimized               = var.ebs_optimized

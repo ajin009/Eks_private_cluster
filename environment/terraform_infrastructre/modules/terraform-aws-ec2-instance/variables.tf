@@ -73,11 +73,12 @@ variable "availability_zone" {
   default     = ""
 }
 
-variable "ami" {
+variable "ami_id" {
+  description = "The AMI ID to use for EC2 instances."
   type        = string
-  description = "The AMI to use for the instance. By default it is the AMI provided by Amazon with Ubuntu 20.04 LTS"
   default     = "ami-0393c667f03357980"
 }
+
 
 variable "ami_owner" {
   type        = string

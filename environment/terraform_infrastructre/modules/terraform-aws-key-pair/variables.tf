@@ -65,8 +65,9 @@ variable "ssh_key_algorithm" {
 
 variable "private_key_extension" {
   type        = string
-  default     = ""
+ # default     = ""
   description = "Private key extension"
+   default     = ".pem"
 }
 
 variable "public_key_extension" {

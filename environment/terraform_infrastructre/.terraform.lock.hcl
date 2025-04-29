@@ -45,7 +45,7 @@ provider "registry.terraform.io/hashicorp/kubernetes" {
 
 provider "registry.terraform.io/hashicorp/local" {
   version     = "1.4.0"
-  constraints = ">= 1.2.0, ~> 1.2, >= 1.3.0, ~> 1.3"
+  constraints = ">= 1.2.0, ~> 1.2, ~> 1.3"
   hashes = [
     "h1:P3mtBQSRp/KhVLJgwdHZRTWaYsT6A9nSwrmKrRZwsW8=",
     "zh:1b265fcfdce8cc3ccb51969c6d7a61531bf8a6e1218d95c1a74c40f25595c74b",
@@ -65,7 +65,7 @@ provider "registry.terraform.io/hashicorp/local" {
 
 provider "registry.terraform.io/hashicorp/null" {
   version     = "2.1.2"
-  constraints = "~> 2.0"
+  constraints = ">= 2.0.0, ~> 2.0, ~> 2.1"
   hashes = [
     "h1:CFnENdqQu4g3LJNevA32aDxcUz2qGkRGQpFfkI8TCdE=",
     "zh:0cc7236c1fbf971b8bad1540a7d0c5ac4579248239fd1034c023b0b660a8d1d5",
@@ -105,7 +105,7 @@ provider "registry.terraform.io/hashicorp/random" {
 
 provider "registry.terraform.io/hashicorp/template" {
   version     = "2.2.0"
-  constraints = ">= 2.0.0, ~> 2.0"
+  constraints = "~> 2.0"
   hashes = [
     "h1:94qn780bi1qjrbC3uQtjJh3Wkfwd5+tTtJHOb7KTg9w=",
     "zh:01702196f0a0492ec07917db7aaa595843d8f171dc195f4c988d2ffca2a06386",
@@ -118,5 +118,25 @@ provider "registry.terraform.io/hashicorp/template" {
     "zh:992843002f2db5a11e626b3fc23dc0c87ad3729b3b3cff08e32ffb3df97edbde",
     "zh:ad906f4cebd3ec5e43d5cd6dc8f4c5c9cc3b33d2243c89c5fc18f97f7277b51d",
     "zh:c979425ddb256511137ecd093e23283234da0154b7fa8b21c2687182d9aea8b2",
+  ]
+}
+
+provider "registry.terraform.io/hashicorp/tls" {
+  version     = "2.2.0"
+  constraints = "~> 2.0"
+  hashes = [
+    "h1:BRvNNW/32RAFXRcEAovtJWVbFt8zesIKkQm2N0GBCn8=",
+    "zh:0e99d1b3710f30df818cd662e2ea7b2005cec2a0c64cedd31c459b214f45e9b5",
+    "zh:43a97fd341c66113aeecfa2f976eb8f5e0b83a6a8824828fac2afef2682d9957",
+    "zh:501aa0ed294c7befb8bf6e00fd9d8cf4055e1135cb8872f83488ebcde9a89985",
+    "zh:51862aeed0f28092c877a5f64ddac55b8f6c05cf5278fb51afab5d20b3819934",
+    "zh:52c22bf8621a120080c7c8c11bfab51678ab9dc3e5c88dc89df8b2c0434a8c89",
+    "zh:658cce07951f8ba8f170b71198c198e526a82ba56cb74d27b24adf2574eb07b2",
+    "zh:80a7db37b00c5d9054f68dc62283ce11dcc83b714d550fc56e6b8544bc01d1a8",
+    "zh:935dd4f4995286c871162bb96ebb49c2d80ef09f2225be62a4ef06c0fcbd72d4",
+    "zh:af89f57dc41c4d09fd9b7d1277e5ad1d4989cd672f3e58e1891d59020015d21a",
+    "zh:d45870cf06ed9910d5956175c996cc7bb677f3a8edd94c66a48a3fb93c8d2a84",
+    "zh:de96c5fadb346adb5e39ea8901c93335b0f3408dd8d477a996b4eb845a8d2343",
+    "zh:e0f3c179975b7fa5898ebe9cc70621f9da301a14e5262399b074ccb675308bd3",
   ]
 }

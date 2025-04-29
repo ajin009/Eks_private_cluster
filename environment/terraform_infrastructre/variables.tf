@@ -150,10 +150,10 @@ variable "generate_ssh_key" {
   description = "This variable generate SSH key for the ec2 instance module"
 }
 
-variable "bastion_ami" {
+variable "ami_id" {
+  description = "The AMI ID to use for EC2 instances."
   type        = string
-  description = "The AMI to use for the instance/bastion. By default it is the AMI provided by Amazon with Ubuntu 20.04 LTS"
-  default     = "ami-0694d931cee176e7d"
+  default     = "ami-0393c667f03357980"
 }
 
 variable "ami_owner" {
@@ -231,10 +231,10 @@ sudo mv ./kubectl /usr/local/bin/kubectl
 EOF
 }
 
-variable "bastion_ip" {
-  default = "13.201.49.146"
-  type    = string
-}
+# variable "bastion_ip" {
+#   default = "13.201.49.146"
+#   type    = string
+# }
 
 # variable "tls_private_key" {
 #   description = "/home/ajin/project1/environment/terraform_infrastructre/test.pem"
