@@ -142,56 +142,12 @@ module "bastion" {
  }
 }
 
-
-# resource "null_resource" "install_nginx_ingress" {
- 
- 
-#   triggers = {
-#     cluster_name = var.eks_cluster_name
- 
-#   }
- 
-#   connection {
-#     type        = "ssh"
-#     host        =  module.bastion.public_ip
-#     user        = "ubuntu"
-#     private_key = file("/home/ajin/project1/Eks_private_cluster/environment/terraform_infrastructre/secrets/woooba-prod-bastion-key.pem")
-#   }
- 
-#   # provisioner "file" {
-#   #   source      = "${path.module}/ingress-nginx-helm-chart" # Update this path
-#   #   destination = "/tmp/nginx-ingress-helm-chart"
-#   # }
- 
-#   provisioner "remote-exec" {
-#   inline = [
-#       "echo 'Installing Helm & configuring kubectl...'",
-#       "curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash",
-#       "aws eks update-kubeconfig --region ap-south-1 --name my-new-cluster-cluster",
-#       "kubectl get nodes",
-#       "echo 'Installing NGINX Ingress Controller...'",
-#       "kubectl create namespace ingress-nginx || echo 'Namespace already exists'",
-#       "kubectl wait --for=condition=Ready ns/ingress-nginx --timeout=30s",
-#       "helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx",
-#       "helm repo update",
-#       "helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \\",
-#       "  --namespace ingress-nginx \\",
-#       "  --set controller.service.type=LoadBalancer \\",
-#       "  --set controller.service.annotations.\"service.beta.kubernetes.io/aws-load-balancer-type\"=nlb \\",
-#       "  --wait",
-#       "echo 'NGINX Ingress Controller installed successfully'"
-#     ]
-# }
- 
-# }
-
-
 module "nginx_ingress" {
   source                 = "./modules/nginx_ingress"
   eks_cluster_name       = var.eks_cluster_name
   aws_region             = "ap-south-1"
   bastion_host           = module.bastion.public_ip
   bastion_user           = "ubuntu"
-  bastion_private_key_path = "/home/ajin/project1/Eks_private_cluster/environment/terraform_infrastructre/secrets/woooba-prod-bastion-key.pem"
+  bastion_private_key_path = "./secrets/prod-bastion-key.pem"
 }
 
